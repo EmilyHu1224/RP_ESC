@@ -8,24 +8,24 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 define("AMOUNT_CHARACTER", "0123456789.");
 define("QR_PAY_URL", "https://dev.riverpayments.com/t_shipped/rest/gen_payment_qr");
 
-$data = $_POST["data"];
-$bin = base64_decode($data, true);
-$filename = "temp.pdf";
-file_put_contents("/tmp/$filename", $bin);
-
-$image_format = "png";
-$img_name = "out.".$image_format;
-$new_width = 550;
-
 function is_amount_char($c){
     return strpos(AMOUNT_CHARACTER, $c) !== false;
 }
 
+$data = $_POST["data"];
+$bin = base64_decode($data, true);
+$filename_input = "input.pdf";
+$filename_output = "output.txt";
+file_put_contents($filename_input, $bin);
+
+$image_format = "png";
+$img_name = "out.".$image_format;
+$new_width = 550;
 $token = "demomike11";
 $url =  "";
 
 $reader = new \Asika\Pdf2text;
-$data = $reader->decode($filename);
+$data = $reader->decode($filename_input);
 
 $keyword = "Total USD:\n";
 $pos = strpos($data, $keyword);
@@ -65,7 +65,7 @@ if ($pos) {
 try {
     $im = new Imagick();
     $im->setResolution(550,550);
-    $im->readimage($filename);
+    $im->readimage($filename_input);
     $im->resizeImage($new_width, 0, Imagick::FILTER_UNDEFINED, 1);
     $im->cropImage($new_width, 925, 0, 0);
     $im->setImageFormat($image_format);
@@ -76,7 +76,7 @@ try {
     error_log($e->getMessage()."\n");
 }
 
-$connector = new FilePrintConnector("output.txt");
+$connector = new FilePrintConnector($filename_output);
 $printer = new Printer($connector);
 
 try {
@@ -99,5 +99,5 @@ try {
     $printer -> close();
 }
 
-$content = file_get_contents("foo.txt");
+$content = file_get_contents($filename_output);
 echo base64_encode($str);
