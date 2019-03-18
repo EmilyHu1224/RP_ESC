@@ -99,5 +99,5 @@ try {
     $printer -> close();
 }
 
-$content = file_get_contents($filename_output);
-echo base64_encode($str);
+$output = file_get_contents($filename_output);
+echo base64_encode($output);
