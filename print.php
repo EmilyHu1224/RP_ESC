@@ -13,7 +13,7 @@ define("QR_PAY_URL", "https://dev.riverpayments.com/t_shipped/rest/gen_payment_q
 /*
  * Directories & filenames
  */
-define("TEMP_PATH", "/tmp/print");
+define("TEMP_PATH", "/tmp");
 define("INPUT_FILENAME", TEMP_PATH . "/input.pdf");
 define("OUTPUT_FILENAME", TEMP_PATH . "/output.txt");
 define("IMAGE_FORMAT", "png");
